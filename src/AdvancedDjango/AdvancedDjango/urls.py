@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from products.views import product_detail_view, product_create_view
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^create/', product_create_view),
+    url(r'^product/', product_detail_view)
 ]
