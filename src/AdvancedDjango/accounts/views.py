@@ -1,8 +1,9 @@
 from django.shortcuts import render, HttpResponse, redirect
+from django.core.urlresolvers import reverse
 from django.contrib.auth.forms import UserCreationForm
-from .forms import RegistrationForm, EditProfileForm
+from .forms import ( RegistrationForm, EditProfileForm )
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 
 # Create your views here.
 def home(request):
@@ -37,3 +38,18 @@ def edit_profile(request):
         form = EditProfileForm(instance=request.user)
         args = { 'form': form }
         return render(request, 'accounts/edit_profile.html', args)
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+
+        if form.is_valid():
+            form.save()
+            return redirect('/account/profile')
+        else:
+            return redirect('/account/change-password')
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+        args = {'form': form}
+        return render(request, 'accounts/change_password.html', args)
