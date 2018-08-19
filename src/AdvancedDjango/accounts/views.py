@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import ( RegistrationForm, EditProfileForm )
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 # Create your views here.
 def home(request):
@@ -45,6 +46,7 @@ def change_password(request):
 
         if form.is_valid():
             form.save()
+            update_session_auth_hash(request, form.user)
             return redirect('/account/profile')
         else:
             return redirect('/account/change-password')
